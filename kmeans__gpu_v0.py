@@ -64,15 +64,14 @@ class k_means_gpu:
                 evolution = min([performance[i]-performance[i+1] for i in range(len(performance)-1)])
                 if torch.mean(centroid_convergence) >= self.convergence and mean_convergence < min(performance):
                     self.has_converged = False
-                    self.centroids = latest_centroid 
                     
                 if mean_convergence >= min(performance) or mean_convergence == min(performance) or self.convergence >= evolution:        
                     self.has_converged=True
                     
                 if self.has_converged:
-                    self.centroids = latest_centroid
                     break
                     
+        self.centroids = latest_centroid        
         return self.centroids
     
     
