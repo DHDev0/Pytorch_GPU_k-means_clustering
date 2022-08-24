@@ -72,9 +72,7 @@ class k_means_gpu:
                 if self.has_converged:
                     self.centroids = latest_centroid
                     break
-                
-        #Final centroids with custom abs
-        self.centroids = (torch.sign(self.centroids) * torch.floor(torch.abs(self.centroids) + 0.5)).type(torch.uint8).to("cpu").numpy()
+                    
         return self.centroids
     
     
