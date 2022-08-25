@@ -115,7 +115,7 @@ class k_means_gpu:
         pointer_to_encode_tensor = torch.tensor(pointer_to_encode).to(self.device)
         tensor_2d = self.d2_flatten(pointer_to_encode_tensor)
         metric_between_input_and_centroid  = torch.sqrt(torch.sum(((self.centroids.to(self.device) - tensor_2d)**2),dims=1))
-        result = torch.argmin(metric_between_input_and_centroid).reshape((pointer_to_encode_tensor.size())[:-1]+(1,)).type(torch.uint8).numpy()
+        result = torch.argmin(metric_between_input_and_centroid).reshape(tuple(pointer_to_encode_tensor.size())[:-1]+(1,)).type(torch.uint8).numpy()
         if save_array:
             save(f'{data_path}.npy', result)
             return f'Save encode array file to {data_path}.npy'
@@ -125,7 +125,7 @@ class k_means_gpu:
         self.compute_opt(compute_device)
         pointer_to_decode = torch.tensor(pointer_to_encode).to(self.device)
         tensor_flatten = pointer_to_encode_tensor.flatten()
-        result = self.centroids.to(self.device)[tensor_flatten].reshape((pointer_to_decode.size())[:-1]).type(torch.float64).numpy()
+        result = self.centroids.to(self.device)[tensor_flatten].reshape(tuple(pointer_to_decode.size())[:-1]+tuple(self.centroids.size[-1])).type(torch.float64).numpy()
         if save_array:
             save(f'{data_path}.npy', result)
             return f'Save decode array file to {data_path}.npy'
