@@ -13,8 +13,11 @@ class k_means_gpu:
         self.has_converged = False
         self.performance = []
         self.gpu_split = self.gpu_allocation(vram)
+        self.verbose = True
         
     def fit(self, data, retrain = False, verbose = True):
+        
+        self.verbose = verbose
         
         #splitting is done on cpu then batching and computation on gpu if possible
         data = self.d2_flatten(torch.tensor(data).to("cpu"))
@@ -31,8 +34,8 @@ class k_means_gpu:
         #hyperparameter
         centroid_k_category=torch.arange(self.clusters).reshape(self.clusters,1).to(self.device)
         excluder = torch.tensor([0]).to(device= self.device,dtype= data.dtype).float()
-        dim_metric_for_compute = len(shape) if len(shape) >= 2 else 2      #TODO can reduce amount of hyperparameter since code run in 2D always mode              
-        dim_argmin_reshape =  len(shape)-1 if len(shape) >= 2 else 2
+        self.dim_metric_for_compute = len(shape) if len(shape) >= 2 else 2      #TODO can reduce amount of hyperparameter since code run in 2D always mode              
+        self.dim_argmin_reshape =  len(shape)-1 if len(shape) >= 2 else 2
         gpu_allocation = int(1/((self.gpu_split/(self.clusters/10))/shape[0]))
         data_split = torch.tensor_split(data[:,None,:],gpu_allocation if gpu_allocation > 1 else 2) 
 
@@ -46,8 +49,8 @@ class k_means_gpu:
             for batchs in torch.randint(0, len(data_split)-1,(len(data_split),)):
                 batch = data_split[batchs].to(self.device)
                 centroid_reshape_for_compute =  self.centroids[None,:,:] 
-                metric_between_input_and_centroid = torch.sqrt(torch.sum(torch.pow((centroid_reshape_for_compute -batch),2),dim = dim_metric_for_compute ))# custom distance metric calculation can be  implement here
-                centroid_category = torch.argmin(metric_between_input_and_centroid,dim = dim_argmin_reshape)
+                metric_between_input_and_centroid = torch.sqrt(torch.sum(torch.pow((centroid_reshape_for_compute -batch),2),dim = self.dim_metric_for_compute ))# custom distance metric calculation can be  implement here
+                centroid_category = torch.argmin(metric_between_input_and_centroid,dim = self.dim_argmin_reshape)
                 boolean_mask_with_reshape = (centroid_k_category == centroid_category).T[:,:,None] 
                 extract_close_metric_using_batch_on_mask = (boolean_mask_with_reshape * batch ).type(torch.float)
                 latest_centroid = extract_close_metric_using_batch_on_mask.sum(dim=0) / (~torch.isclose(torch.nan_to_num(extract_close_metric_using_batch_on_mask),excluder)).long().sum(dim=0)
@@ -62,9 +65,6 @@ class k_means_gpu:
             mean_convergence = torch.mean(centroid_convergence)
             self.performance.append(mean_convergence)
             self.centroids = latest_centroid
-            
-            if verbose:
-                print(f"epoch number: {epoch} |actual convergence: {mean_convergence} | converge min / rate: {self.convergence}")
                 
             #Use estimator to end or continue iteration
             if epoch > 1 and self.convergence_eval():
@@ -72,10 +72,14 @@ class k_means_gpu:
                 print('End compute')
                 break
         self.centroids = self.centroids.to("cpu")
-    
+        torch.cuda.empty_cache()
+        
     def convergence_eval(self):
         try:
-            evolution = min([self.performance[i]-self.performance[i+1] for i in range(len(self.performance[:-1])-1)])
+            evolution = self.performance[-2]-self.performance[-1]
+            if self.verbose:
+                print(f"|actual convergence: {self.performance[-1]} | rate of convergence: {evolution} |converge min / rate: {self.convergence}")
+                
             if self.performance[-1] <= self.convergence and self.performance[-1] < min(self.performance[:-1]) and evolution >= self.convergence:
                 self.has_converged = False 
                 
@@ -112,31 +116,35 @@ class k_means_gpu:
             
     def encode(self,pointer_to_encode, compute_device = "default",save_array = False, data_path = "encoded_array"):
         self.compute_opt(compute_device)
-        pointer_to_encode_tensor = torch.tensor(pointer_to_encode).to(self.device)
-        tensor_2d = self.d2_flatten(pointer_to_encode_tensor)
-        metric_between_input_and_centroid  = torch.sqrt(torch.sum(((self.centroids.to(self.device) - tensor_2d)**2),dims=1))
-        result = torch.argmin(metric_between_input_and_centroid).reshape(tuple(pointer_to_encode_tensor.size())[:-1]+(1,)).type(torch.uint8).numpy()
+        pointer_to_encode_tenso = torch.tensor(compress_input).to(self.device) pointer_to_encode_tenso
+        centroid_to_device = self.centroids.to(self.device)
+        tensor_2d = self.d2_flatten(pointer_to_encode_tenso)
+        distance_merge = torch.sum((centroid_to_device[None,:,:]  - tensor_2d[:,None,:] )**2,dim=self.dim_metric_for_compute)
+        result  = torch.argmin(distance_merge,dim=self.dim_argmin_reshape).reshape(tuple(pointer_to_encode_tensor.size())[:-1]+(1,)).type(torch.uint8).cpu().numpy()
         if save_array:
-            save(f'{data_path}.npy', result)
+            np.save(f'{data_path}.npy', result)
             return f'Save encode array file to {data_path}.npy'
         return result
+    
     
     def decode(self,pointer_to_decode, compute_device = "default",save_array = False, data_path = "decoded_array"):
         self.compute_opt(compute_device)
         pointer_to_decode = torch.tensor(pointer_to_encode).to(self.device)
         tensor_flatten = pointer_to_encode_tensor.flatten()
-        result = self.centroids.to(self.device)[tensor_flatten].reshape(tuple(pointer_to_decode.size())[:-1]+tuple(self.centroids.size[-1])).type(torch.float64).numpy()
+        result = self.centroids.to(self.device)[tensor_flatten].reshape(tuple(pointer_to_decode.size())[:-1]+tuple(self.centroids.size()[-1])).type(torch.float64).cpu().numpy()
         if save_array:
-            save(f'{data_path}.npy', result)
+            np.save(f'{data_path}.npy', result)
             return f'Save decode array file to {data_path}.npy'
         return result
    
     def compress_input(self,compress_input, compute_device = "default",save_array = False, data_path = "compress_array"):
         self.compute_opt(compute_device)
         compress_input_to_torch = torch.tensor(compress_input).to(self.device)
+        centroid_to_device = self.centroids.to(self.device)
         tensor_2d = self.d2_flatten(compress_input_to_torch)
-        metric_between_input_and_centroid  = torch.sqrt(torch.sum(((self.centroids.to(self.device) - tensor_2d)**2),dims=1))
-        result = self.centroids.to(self.device)[torch.argmin(metric_between_input_and_centroid)].reshape(compress_input_to_torch.size()).type(compress_input_to_torch.dtype).numpy()
+        distance_merge = torch.sum((centroid_to_device[None,:,:]  - tensor_2d[:,None,:] )**2,dim=self.dim_metric_for_compute)
+        metric_between_input_and_centroid  = torch.argmin(distance_merge,dim=self.dim_argmin_reshape)
+        result = centroid_to_device[metric_between_input_and_centroid].reshape(compress_input_to_torch.size()).type(compress_input_to_torch.dtype).cpu().numpy()
         if save_array:
             save(f'{data_path}.npy', result)
             return f'Save compressed array file to {data_path}.npy'
