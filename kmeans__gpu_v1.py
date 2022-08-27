@@ -116,7 +116,7 @@ class k_means_gpu:
             
     def encode(self,pointer_to_encode, compute_device = "default",save_array = False, data_path = "encoded_array"):
         self.compute_opt(compute_device)
-        pointer_to_encode_tenso = torch.tensor(compress_input).to(self.device) pointer_to_encode_tenso
+        pointer_to_encode_tenso = torch.tensor(compress_input).to(self.device)
         centroid_to_device = self.centroids.to(self.device)
         tensor_2d = self.d2_flatten(pointer_to_encode_tenso)
         distance_merge = torch.sum((centroid_to_device[None,:,:]  - tensor_2d[:,None,:] )**2,dim=self.dim_metric_for_compute)
