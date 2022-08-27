@@ -2,7 +2,7 @@
 A pytorch implementation of k-means_clustering<br />
 <br />
 The algorithm is an adaptation of MiniBatchKMeans sklearn with an autoscaling of the batch base on your VRAM memory.<br /> 
-The algorithm is N dimensional, itwill tranform any input to 2D.<br />
+The algorithm is N dimensional, it will transform any input to 2D.<br />
 ( you still have to insert the amount of VRAM because only Pytorch 1.11+ support command call to retrieve VRAM information)<br />
 <br />
 The code is using very simple torch operation so it should be compatible with a lot of legacy pytorch version.<br />
