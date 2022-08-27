@@ -1,5 +1,5 @@
-# Pytorch_GPU_k-means_clustering
-A pytorch implementation of k-means_clustering
+# Pytorch_GPU_k-means_clustering<br />
+A pytorch implementation of k-means_clustering<br />
 <br />
 The algorithm is an adaptation of MiniBatchKMeans sklearn with an autoscaling of the batch base on your VRAM memory.<br /> 
 The algorithm is N dimensional, itwill tranform any input to 2D.<br />
