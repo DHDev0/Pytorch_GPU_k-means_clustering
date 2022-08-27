@@ -19,4 +19,4 @@ Benchmark: 21.5x speed gain compare to sklearn.kmeans (even if the comparaison i
 |X| Join, implement or make a generalize dataloader for anytype of structured or unstructured data<br />
 |X| Perhaps a tensorflow implementation or more direct python cuda<br />
 <br />
-Let me know on "issues" if have idea or problem.
+Let me know on "issues" if you have any idea or problem.
