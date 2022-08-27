@@ -15,7 +15,7 @@ Benchmark: 21.5x speed gain compare to sklearn.kmeans (even if the comparaison i
 |X| Multi-GPU (coming soon...)<br />
 |X| Multi-CPU (coming soon...)<br />
 |X| Will also be using: https://jamesxli.blogspot.com/2012/03/on-mean-shift-and-k-means-clustering.html for a better cluster accuracy.<br />
-|X| Going to try to limit the amount of data per cluster. Auto-clustering using sample of random sample to determine an optimal cluster size for the amount of data desire<br />
+|X| Going to try to limit the amount of data per cluster. Auto-clustering using sample of random sample to determine an optimal cluster size for the amount of data desire per cluster<br />
 |X| Join, implement or make a generalize dataloader for anytype of structured or unstructured data<br />
 |X| Perhaps a tensorflow implementation or more direct python cuda<br />
 <br />
