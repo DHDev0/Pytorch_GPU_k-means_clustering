@@ -8,7 +8,7 @@ The code is using very simple torch operation so it should be compatible with a 
 <br />
 Tutorial: https://github.com/DHDev0/Pytorch_GPU_k-means_clustering/blob/main/tutorial_kmean_gpu.ipynb <br />
 <br />
-Benchmark (cpu mode vs cpu sklearn vs gpu mode): <br />
+Benchmark (cpu mode vs cpu sklearn vs gpu mode): https://github.com/DHDev0/Pytorch_GPU_k-means_clustering/blob/main/tutorial_kmean_gpu.ipynb <br />
 <br />
 Incoming/idea:<br />
 |X| Multi-GPU (coming soon...)<br />
