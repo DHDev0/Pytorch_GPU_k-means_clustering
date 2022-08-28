@@ -8,8 +8,9 @@ The code is using very simple torch operation so it should be compatible with a 
 <br />
 Tutorial: https://github.com/DHDev0/Pytorch_GPU_k-means_clustering/blob/main/tutorial_kmean_gpu.ipynb <br />
 <br />
-Benchmark (cpu mode vs cpu sklearn vs gpu): <br />
+Benchmark (cpu mode vs cpu sklearn vs gpu mode): <br />
 <br />
+Incoming/idea:<br />
 |X| Multi-GPU (coming soon...)<br />
 |X| Multi-CPU (coming soon...)<br />
 |X| Add other metric(euclidean distance only) such as Taxicab Geometry, Minkowski distance, Jaccard index, Hamming distance, Fractal dimension(with some scaling constant), CrossEntropy(with some scaling constant)<br />
