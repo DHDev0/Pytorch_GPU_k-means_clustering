@@ -1,12 +1,12 @@
 # Pytorch_GPU_k-means_clustering<br />
 Pytorch GPU friendly implementation of k means clustering (and k-nearest neighbors algorithm) <br />
 <br />
-The algorithm is an adaptation of MiniBatchKMeans sklearn with an autoscaling of the batch base on your VRAM memory.The algorithm is N dimensional, it will transform any input to 2D. You can compute arbitrary big dataset by splitting them to 10 millions datapoints per sample(file) using only 2.5GB of VRAM. <br />
+The algorithm is an adaptation of MiniBatchKMeans sklearn with an autoscaling of the batch base on your VRAM memory. The algorithm is N dimensional, it will transform any input to 2D. You can compute arbitrary big dataset by splitting them to 10 millions datapoints per sample(file) using only 2.5GB of VRAM. <br />
 ( you still have to insert the amount of VRAM because only Pytorch 1.11+ support command call to retrieve VRAM information)<br />
 <br />
 The code is using very simple torch operation so it should be compatible with a lot of legacy pytorch version.<br />
 <br />
-You will find a tutorial base on jupyter lab block that describe the different function.<br />
+You will find a tutorial base on jupyter lab that describe the different function.<br />
 <br />
 Benchmark: 21.5x speed gain compare to sklearn.kmeans (even if the comparaison isn't fair)<br />
 ( a bit faster than kmeans on RAPIDS[ having 20.5x speed gain against sklearn.kmeans] )<br />
