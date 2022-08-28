@@ -13,6 +13,7 @@ Benchmark (cpu mode vs cpu sklearn vs gpu mode): <br />
 Incoming/idea:<br />
 |X| Multi-GPU (coming soon...)<br />
 |X| Multi-CPU (coming soon...)<br />
+|X| Add Float 8/16/32/64 mode <br />
 |X| Add other metric(euclidean distance only) such as Taxicab Geometry, Minkowski distance, Jaccard index, Hamming distance, Fractal dimension(with some scaling constant), CrossEntropy(with some scaling constant)<br />
 |X| Will also be using: https://jamesxli.blogspot.com/2012/03/on-mean-shift-and-k-means-clustering.html for a better cluster accuracy.<br />
 |X| Going to try to limit the amount of data per cluster. Auto-clustering using sample of random sample to determine an optimal cluster size for the amount of data desire per cluster<br />
