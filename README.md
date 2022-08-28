@@ -6,7 +6,7 @@ The algorithm is an adaptation of MiniBatchKMeans sklearn with an autoscaling of
 <br />
 The code is using very simple torch operation so it should be compatible with a lot of legacy pytorch version.<br />
 <br />
-Tutorial: https://github.com/DHDev0/Pytorch_GPU_k-means_clustering/blob/main/tutorial_kmean_gpu.ipynb <br />
+Tutorial: [https://github.com/DHDev0/Pytorch_GPU_k-means_clustering/blob/main/tutorial_kmean_gpu.ipynb ](https://github.com/DHDev0/Pytorch_GPU_k-means_clustering/blob/ce220c6f35f3dbc80839b600b1484a4e85108325/benchmark.ipynb)<br />
 <br />
 Benchmark (cpu mode vs cpu sklearn vs gpu mode): [https://github.com/DHDev0/Pytorch_GPU_k-means_clustering/blob/main/tutorial_kmean_gpu.ipynb](https://github.com/DHDev0/Pytorch_GPU_k-means_clustering/blob/66501d2891cea0d1e0d1e4a65776a3068a5cb07e/tutorial_kmean_gpu.ipynb) <br />
 <br />
