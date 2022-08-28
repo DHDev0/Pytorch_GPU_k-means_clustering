@@ -6,9 +6,9 @@ The algorithm is an adaptation of MiniBatchKMeans sklearn with an autoscaling of
 <br />
 The code is using very simple torch operation so it should be compatible with a lot of legacy pytorch version.<br />
 <br />
-You will find a tutorial base on jupyter lab that describe the different function.<br />
+Tutorial: https://github.com/DHDev0/Pytorch_GPU_k-means_clustering/blob/main/tutorial_kmean_gpu.ipynb <br />
 <br />
-Benchmark: 21.5x speed gain compare to sklearn.kmeans (even if the comparaison isn't fair)<br />
+Benchmark (cpu mode vs cpu sklearn vs gpu): <br />
 ( a bit faster than kmeans on RAPIDS[ having 20.5x speed gain against sklearn.kmeans] )<br />
 <br />
 |X| Multi-GPU (coming soon...)<br />
